@@ -3,7 +3,9 @@
 void main(void) {
   SMS_displayOn();
   // the game loop
-  for(;;);
+  for(;;) {
+    SMS_waitForVBlank(); 
+  }
 }
 
 /*
