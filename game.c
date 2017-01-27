@@ -1,8 +1,35 @@
 #include "SMSlib.h"
-#include <string.h>
-
-char str1[10];
 
 void main(void) {
-  strcpy(str1, "testing");
+  SMS_displayOn();
+  // the game loop
+  for(;;);
+}
+
+/*
+Utiliza os controles para mover a nave
+*/
+void moveShip(void) {
+
+}
+
+/*
+Efetua os disparos
+*/
+void shoot(void) {
+
+}
+
+/*
+Cria um inimigo novo na tela
+*/
+void spawnEnemy(void) {
+
+}
+
+/*
+Efetua a movimentação da nave
+*/
+void moveEnemy(void) {
+
 }
