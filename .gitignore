@@ -1,0 +1,10 @@
+game.rel
+*.noi
+*.asm
+*.ihx
+*.lk
+*.lst
+*.map
+*.mem
+*.rst
+*.sym
