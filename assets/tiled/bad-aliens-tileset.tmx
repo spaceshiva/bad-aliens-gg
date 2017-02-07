@@ -1,57 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="20" height="18" tilewidth="8" tileheight="8" nextobjectid="1">
- <tileset firstgid="1" name="title" tilewidth="16" tileheight="16" tilecount="10" columns="0">
-  <tile id="9">
-   <image width="16" height="16" source="../png/A.png"/>
-  </tile>
-  <tile id="10">
-   <image width="16" height="16" source="../png/B.png"/>
-  </tile>
-  <tile id="11">
-   <image width="16" height="16" source="../png/D.png"/>
-  </tile>
-  <tile id="12">
-   <image width="16" height="16" source="../png/E.png"/>
-  </tile>
-  <tile id="14">
-   <image width="16" height="16" source="../png/L.png"/>
-  </tile>
-  <tile id="15">
-   <image width="16" height="16" source="../png/N.png"/>
-  </tile>
-  <tile id="16">
-   <image width="16" height="16" source="../png/S.png"/>
-  </tile>
+ <tileset firstgid="1" name="title" tilewidth="16" tileheight="16" tilecount="49" columns="0">
   <tile id="18">
    <image width="8" height="8" source="../png/bg.png"/>
   </tile>
   <tile id="19">
    <image width="8" height="8" source="../png/alien.png"/>
   </tile>
-  <tile id="21">
+  <tile id="25">
+   <image width="8" height="8" source="../png/ship.png"/>
+  </tile>
+  <tile id="26">
+   <image width="8" height="8" source="../png/0_.png"/>
+  </tile>
+  <tile id="27">
+   <image width="8" height="8" source="../png/1_.png"/>
+  </tile>
+  <tile id="28">
+   <image width="8" height="8" source="../png/2_.png"/>
+  </tile>
+  <tile id="29">
+   <image width="8" height="8" source="../png/3_.png"/>
+  </tile>
+  <tile id="30">
+   <image width="8" height="8" source="../png/4_.png"/>
+  </tile>
+  <tile id="31">
+   <image width="8" height="8" source="../png/5_.png"/>
+  </tile>
+  <tile id="32">
+   <image width="8" height="8" source="../png/6_.png"/>
+  </tile>
+  <tile id="33">
+   <image width="8" height="8" source="../png/7_.png"/>
+  </tile>
+  <tile id="34">
+   <image width="8" height="8" source="../png/8_.png"/>
+  </tile>
+  <tile id="35">
+   <image width="8" height="8" source="../png/9_.png"/>
+  </tile>
+  <tile id="36">
+   <image width="8" height="8" source="../png/Y_.png"/>
+  </tile>
+  <tile id="37">
+   <image width="8" height="8" source="../png/Z_.png"/>
+  </tile>
+  <tile id="38">
+   <image width="8" height="8" source="../png/A_.png"/>
+  </tile>
+  <tile id="40">
+   <image width="8" height="8" source="../png/B_.png"/>
+  </tile>
+  <tile id="43">
+   <image width="8" height="8" source="../png/D_.png"/>
+  </tile>
+  <tile id="45">
+   <image width="8" height="8" source="../png/E_.png"/>
+  </tile>
+  <tile id="47">
+   <image width="8" height="8" source="../png/F_.png"/>
+  </tile>
+  <tile id="48">
+   <image width="8" height="8" source="../png/G_.png"/>
+  </tile>
+  <tile id="49">
+   <image width="8" height="8" source="../png/H_.png"/>
+  </tile>
+  <tile id="50">
+   <image width="8" height="8" source="../png/I_.png"/>
+  </tile>
+  <tile id="52">
+   <image width="8" height="8" source="../png/J_.png"/>
+  </tile>
+  <tile id="53">
+   <image width="8" height="8" source="../png/K_.png"/>
+  </tile>
+  <tile id="54">
+   <image width="8" height="8" source="../png/L_.png"/>
+  </tile>
+  <tile id="56">
+   <image width="8" height="8" source="../png/M_.png"/>
+  </tile>
+  <tile id="57">
+   <image width="8" height="8" source="../png/N_.png"/>
+  </tile>
+  <tile id="59">
+   <image width="8" height="8" source="../png/O_.png"/>
+  </tile>
+  <tile id="60">
+   <image width="8" height="8" source="../png/P_.png"/>
+  </tile>
+  <tile id="61">
+   <image width="8" height="8" source="../png/Q_.png"/>
+  </tile>
+  <tile id="62">
+   <image width="8" height="8" source="../png/R_.png"/>
+  </tile>
+  <tile id="63">
+   <image width="8" height="8" source="../png/S_.png"/>
+  </tile>
+  <tile id="65">
+   <image width="8" height="8" source="../png/T_.png"/>
+  </tile>
+  <tile id="66">
+   <image width="8" height="8" source="../png/U_.png"/>
+  </tile>
+  <tile id="67">
+   <image width="8" height="8" source="../png/V_.png"/>
+  </tile>
+  <tile id="68">
+   <image width="8" height="8" source="../png/W_.png"/>
+  </tile>
+  <tile id="69">
+   <image width="8" height="8" source="../png/X_.png"/>
+  </tile>
+  <tile id="70">
+   <image width="8" height="8" source="../png/Y_.png"/>
+  </tile>
+  <tile id="71">
+   <image width="8" height="8" source="../png/Z_.png"/>
+  </tile>
+  <tile id="72">
+   <image width="16" height="16" source="../png/A.png"/>
+  </tile>
+  <tile id="73">
+   <image width="16" height="16" source="../png/B.png"/>
+  </tile>
+  <tile id="74">
+   <image width="16" height="16" source="../png/D.png"/>
+  </tile>
+  <tile id="75">
+   <image width="16" height="16" source="../png/E.png"/>
+  </tile>
+  <tile id="76">
    <image width="16" height="16" source="../png/I.png"/>
+  </tile>
+  <tile id="77">
+   <image width="16" height="16" source="../png/L.png"/>
+  </tile>
+  <tile id="78">
+   <image width="16" height="16" source="../png/N.png"/>
+  </tile>
+  <tile id="79">
+   <image width="16" height="16" source="../png/S.png"/>
+  </tile>
+  <tile id="80">
+   <image width="8" height="8" source="../png/C_.png"/>
   </tile>
  </tileset>
  <layer name="initial-screen" width="20" height="18" offsetx="-12.6667" offsety="-5">
   <data encoding="csv">
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
-19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
+19,64,81,60,63,46,19,27,27,27,27,27,19,55,28,19,26,26,26,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
 19,19,19,19,19,19,19,0,0,0,0,0,0,19,19,19,19,19,19,19,
-19,19,19,19,19,19,19,11,0,10,0,12,0,19,19,19,19,19,19,19,
+19,19,19,19,19,19,19,74,0,73,0,75,0,19,19,19,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
 19,19,19,19,0,0,0,0,0,0,0,0,0,0,0,0,19,19,19,19,
-19,19,19,19,10,0,15,0,22,0,13,0,16,0,17,0,19,19,19,19,
+19,19,19,19,73,0,78,0,77,0,76,0,79,0,80,0,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
-19,19,20,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
+19,19,19,20,19,61,63,46,64,64,19,64,66,39,63,66,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
 19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,
-19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19,19
+19,19,19,19,19,19,19,19,19,19,26,19,19,19,19,19,19,19,19,19
 </data>
  </layer>
 </map>
