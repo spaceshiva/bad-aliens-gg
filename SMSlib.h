@@ -3,7 +3,7 @@
    ( part of devkitSMS - github.com/sverx/devkitSMS )
    ************************************************** */
 
-// #define TARGET_GG
+#define TARGET_GG
 /* uncomment previous line to compile for the GameGear */
 
 // #define MD_PAD_SUPPORT
