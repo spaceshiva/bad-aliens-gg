@@ -1,12 +1,12 @@
 XL2
 H 9 areas 4 global symbols
-M initial_scene
+M title_scene
 O -mz80
 S .__.ABS. Def0000
 A _CODE size 166 flags 0 addr 0
-S _initial_scene__tilemap__stmcompr Def0004
-S _initial_scene__palette__bin Def0000
-S _initial_scene__tiles__psgcompr Def004F
+S _title_scene__tilemap__stmcompr Def0004
+S _title_scene__palette__bin Def0000
+S _title_scene__tiles__psgcompr Def004F
 A _DATA size 0 flags 0 addr 0
 A _INITIALIZED size 0 flags 0 addr 0
 A _DABS size 0 flags 8 addr 0
