@@ -1,12 +1,12 @@
 #include "SMSlib.h"
-#include "assets\initial_scene.h"
+#include "assets/initial_scene.h"
 
 #define BG_TILES  0
 // GG display 160 x 144 ou
 void loadAssets(void) {
   SMS_loadPSGaidencompressedTiles(initial_scene__tiles__psgcompr, BG_TILES);
-  SMS_loadSTMcompressedTileMapArea(0, 0, initial_scene__tilemap__stmcompr, 20);
-  GG_loadBGPalette(initial_scene__palette__inc);
+  SMS_loadSTMcompressedTileMapArea(6,3,initial_scene__tilemap__stmcompr,20);
+  GG_loadBGPalette(initial_scene__palette__bin);
 }
 
 void main(void) {
