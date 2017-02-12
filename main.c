@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdlib.h>
 #include "SMSlib.h"
 #include "assets/assets.h"
 
@@ -10,8 +11,8 @@ SMS_EMBED_SDSC_HEADER_AUTO_DATE(1, 0, "chains\\2017", "Bad Aliens GG", "a little
 #define SCORE_TILES 24
 #define SPRITE_TILES 256
 #define SHIP_TILE SPRITE_TILES
-#define BULLET_TILE (SPRITE_TILES+2)
-#define ENEMY_TILE (SPRITE_TILES+4)
+#define BULLET_TILE (SPRITE_TILES+1)
+#define ENEMY_TILE (SPRITE_TILES+2)
 
 #define GG_X  6
 #define GG_Y  3
@@ -25,12 +26,20 @@ SMS_EMBED_SDSC_HEADER_AUTO_DATE(1, 0, "chains\\2017", "Bad Aliens GG", "a little
 
 #define INIT_P_POSX (GG_X * 8) + 80
 #define INIT_P_POSY (GG_Y * 8) + 136
+#define INIT_E_POSY (GG_Y * 8) + 20
+
+#define MIN_X  (GG_X * 8)
+#define MAX_XY  (GG_X * 8) + 152
 
 unsigned char gameState;
 unsigned char playerLives;
 unsigned char score;
 unsigned char level;
 unsigned int playerPosition;
+// 0: x, 1: y, 2: dead?
+unsigned int bulletBehavior[3];
+// 0: X, 1: Y, 2: dead?
+unsigned int enemyBehavior[3];
 
 void loadMainAssets(void) {
   SMS_loadPSGaidencompressedTiles(main_scene__tiles__psgcompr, BG_TILES);
@@ -93,12 +102,10 @@ void updateLives(unsigned char lives) {
 }
 
 void movePlayer(void) {
-#define MINPLAYERX  (GG_X * 8)
-#define MAXPLAYERX  (GG_X * 8) + 152
   unsigned int ks = SMS_getKeysStatus();
-  if((ks & PORT_A_KEY_LEFT) && (playerPosition > MINPLAYERX)) {
+  if((ks & PORT_A_KEY_LEFT) && (playerPosition > MIN_X)) {
     playerPosition -= 2;
-  } else if((ks & PORT_A_KEY_RIGHT) && (playerPosition < MAXPLAYERX)) {
+  } else if((ks & PORT_A_KEY_RIGHT) && (playerPosition < MAX_XY)) {
     playerPosition += 2;
   }
 }
@@ -107,8 +114,98 @@ void drawPlayer(void) {
   SMS_addSprite(playerPosition, INIT_P_POSY, SHIP_TILE);
 }
 
+int randEnemyXPos(void) {
+  unsigned int pos = 0;
+  if(playerPosition >= MIN_X && playerPosition <= MIN_X + 16) {
+    pos = rand() % MAX_XY;
+  } else {
+    pos = rand() % playerPosition;
+  }
+  if(pos < MIN_X) {
+    pos = playerPosition;
+  }
+  if(pos > MAX_XY) {
+    pos = MAX_XY;
+  }
+  return pos;
+}
+
+unsigned char checkBulletEnemyCollision() {
+  unsigned int e[2][2];
+  unsigned int b[2][2];
+
+  e[0][0] = bulletBehavior[0]+3; //min x
+  e[0][1] = bulletBehavior[1];  //min y
+  e[1][0] = bulletBehavior[0]+4; //max x
+  e[1][1] = bulletBehavior[1]+8; //max y
+
+  b[0][0] = enemyBehavior[0];
+  b[0][1] = enemyBehavior[1];
+  b[1][0] = enemyBehavior[0]+8;
+  b[1][1] = enemyBehavior[1]-8;
+
+  if(e[1][0] < b[0][0] || e[0][0] > b[1][0]) return 0;
+  if(e[1][1] < b[0][1] || e[0][1] > b[1][1]) return 0;
+
+  return 1;
+}
+
+void checkEnemyOverlapsScreeen(void) {
+  if(enemyBehavior[1] >= MAX_XY) {
+    enemyBehavior[2] = 1;
+  }
+}
+
+void checkBulletCollsion(void) {
+  if(bulletBehavior[1] <= (GG_Y * 8) + 16) {
+    bulletBehavior[2] = 1;
+  } else if (checkBulletEnemyCollision() == 1) {
+    bulletBehavior[2] = 1;
+    enemyBehavior[2] = 1;
+  }
+}
+
+void moveBullet(void) {
+  unsigned int ks;
+  // ok para atirar
+  if(bulletBehavior[2] == 1) {
+    ks = SMS_getKeysStatus();
+    if(ks & PORT_A_KEY_1) {
+      bulletBehavior[0] = playerPosition;
+      bulletBehavior[1] = INIT_P_POSY + 8;
+      bulletBehavior[2] = 0;
+    }
+  } else {
+    --bulletBehavior[1];
+  }
+}
+
+void drawBullet(void) {
+  if(bulletBehavior[2] == 0) {
+    SMS_addSprite(bulletBehavior[0], bulletBehavior[1], BULLET_TILE);
+  }
+}
+
+void moveEnemy(void) {
+  if(enemyBehavior[2] == 1) {
+    enemyBehavior[2] = 0;
+    enemyBehavior[1] = INIT_E_POSY;
+    enemyBehavior[0] = randEnemyXPos();
+  } else {
+    ++enemyBehavior[1];
+  }
+}
+
+void drawEnemy(void) {
+  if(enemyBehavior[2] == 0) {
+      SMS_addSprite(enemyBehavior[0], enemyBehavior[1], ENEMY_TILE);
+  }
+}
+
 void mainScene(void) {
   playerPosition = INIT_P_POSX;
+  enemyBehavior[2] = 1;
+  bulletBehavior[2] = 1;
   loadMainAssets();
   updateScore(score);
   updateLevel(level);
@@ -116,8 +213,14 @@ void mainScene(void) {
   SMS_displayOn();
   while(gameState == ST_MAIN) {
     movePlayer();
+    moveEnemy();
+    moveBullet();
+    checkEnemyOverlapsScreeen();
+    checkBulletCollsion();
     SMS_initSprites();
     drawPlayer();
+    drawEnemy();
+    drawBullet();
     SMS_finalizeSprites();
     SMS_waitForVBlank();
     SMS_copySpritestoSAT();
@@ -137,21 +240,20 @@ void loadTitleAssets(void) {
 
 void titleScene(void) {
   unsigned int ks = 0;
-  unsigned int x;
+  unsigned int x = 0;
   const unsigned int *pnt;
   loadTitleAssets();
   SMS_displayOn();
   while(gameState == ST_TITLE) {
+    for (x = 0; x < 13; x++) {
+      pnt = &press_start__tilemap__bin[x*2];
+      SMS_setNextTileatXY(GG_X+3+x,GG_Y+13);
+      SMS_setTile(*pnt+++PS_TILES);
+    }
     ks = SMS_getKeysStatus();
     if(ks & GG_KEY_START) {
       gameState = ST_MAIN;
       break;
-    }
-    // press start sentence animation
-    for (x = 0; x < 13; x++) {
-      SMS_setNextTileatXY(GG_X+3+x,GG_Y+13);
-      pnt = &press_start__tilemap__bin[x*2];
-      SMS_setTile(*pnt+++PS_TILES);
     }
     SMS_waitForVBlank();
   }
