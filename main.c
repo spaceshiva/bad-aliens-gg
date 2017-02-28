@@ -5,7 +5,7 @@
 #include "assets/assets.h"
 
 SMS_EMBED_SEGA_ROM_HEADER(9999,0);
-SMS_EMBED_SDSC_HEADER_AUTO_DATE(1, 0, "chains\\2017", "Bad Aliens GG", "a little concept of a old school shump\nBuilt using devkitSMS & SMSlib");
+SMS_EMBED_SDSC_HEADER_AUTO_DATE(0, 2, "chains\\2017", "Bad Aliens GG", "a little concept of a old school shump\nBuilt using devkitSMS & SMSlib");
 
 #define BG_TILES  0
 #define PS_TILES  40
