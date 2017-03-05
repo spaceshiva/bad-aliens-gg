@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "SMSlib.h"
+#include "states.h"
 #include "main.h"
 #include "assets/assets.h"
 
@@ -35,9 +36,9 @@ unsigned char playerLives;
 unsigned int score;
 unsigned char level;
 unsigned int playerPosition;
-// 0: x, 1: y, 2: dead?
+// 0: x, 1: y, 2: state?
 unsigned int bulletBehavior[3];
-// 0: X, 1: Y, 2: dead?
+// 0: X, 1: Y, 2: state?
 unsigned int enemyBehavior[3];
 
 //====================================
@@ -82,7 +83,7 @@ void loadMainAssets(void) {
 // Variables update
 //====================================
 
-void updateScore(unsigned long points) {
+void setScore(unsigned long points) {
   unsigned char x;
   unsigned char pos = 0;
   unsigned char num[5] = {0,0,0,0,0};
@@ -99,7 +100,7 @@ void updateScore(unsigned long points) {
   }
 }
 
-void updateLevel(unsigned char level) {
+void setLevel(unsigned char level) {
   const unsigned int *pnt;
   if(level > 10) {
     return;
@@ -109,7 +110,7 @@ void updateLevel(unsigned char level) {
   SMS_setTile(*pnt+++SCORE_TILES);
 }
 
-void updateLives(unsigned char lives) {
+void setLives(unsigned char lives) {
   const unsigned int *pnt;
   unsigned char x;
   if(lives > 3) {
@@ -125,11 +126,10 @@ void updateLives(unsigned char lives) {
     SMS_setTile(*pnt+++SCORE_TILES);
   }
 }
-
 //====================================
-// Behavior
+// Moving
 //====================================
-int randEnemyXPos(void) {
+unsigned int randEnemyXPos(void) {
   unsigned int pos = 0;
   if(playerPosition >= MIN_X && playerPosition <= MIN_X + 16) {
     pos = rand() % MAX_XY;
@@ -145,6 +145,43 @@ int randEnemyXPos(void) {
   return pos;
 }
 
+void moveEnemy(void) {
+  if(enemyBehavior[2] == STATE_DEAD) {
+    enemyBehavior[2] = STATE_ATACKING;
+    enemyBehavior[1] = INIT_E_POSY;
+    enemyBehavior[0] = randEnemyXPos();
+  } else {
+    ++enemyBehavior[1];
+  }
+}
+
+void movePlayer(void) {
+  unsigned int ks = SMS_getKeysStatus();
+  if((ks & PORT_A_KEY_LEFT) && (playerPosition > MIN_X)) {
+    playerPosition -= 2;
+  } else if((ks & PORT_A_KEY_RIGHT) && (playerPosition < MAX_XY)) {
+    playerPosition += 2;
+  }
+}
+
+void moveBullet(void) {
+  unsigned int ks;
+  // ok para atirar
+  if(bulletBehavior[2] == STATE_DEAD) {
+    ks = SMS_getKeysStatus();
+    if(ks & PORT_A_KEY_1) {
+      bulletBehavior[0] = playerPosition;
+      bulletBehavior[1] = INIT_P_POSY + 8;
+      bulletBehavior[2] = STATE_FIRED;
+    }
+  } else {
+    --bulletBehavior[1];
+  }
+}
+
+//====================================
+// Behavior
+//====================================
 unsigned char checkCollision(unsigned int va[2][2], unsigned int vb[2][2]) {
   if(va[1][0] < vb[0][0] || va[0][0] > vb[1][0]) return 0;
   if(va[1][1] < vb[0][1] || va[0][1] > vb[1][1]) return 0;
@@ -188,99 +225,76 @@ unsigned char checkEnemyShipCollision() {
 
 void checkEnemyOverlapsScreeen(void) {
   if(enemyBehavior[1] >= MAX_XY) {
-    enemyBehavior[2] = 1;
+    enemyBehavior[2] = STATE_DEAD;
   }
 }
 
 void checkBulletOverlapsScreen(void) {
   if(bulletBehavior[1] <= (GG_Y * 8) + 16) {
-    bulletBehavior[2] = 1;
+    bulletBehavior[2] = STATE_DEAD;
   }
 }
 
-void checkBulletBehavior(void) {
+void updateBullet(void) {
   checkBulletOverlapsScreen();
-  if(bulletBehavior[2] == 0) {
+  if(bulletBehavior[2] == STATE_FIRED) {
     if(checkBulletEnemyCollision() == 1) {
-      bulletBehavior[2] = 1;
-      enemyBehavior[2] = 1;
+      bulletBehavior[2] = STATE_DEAD;
+      enemyBehavior[2] = STATE_DEAD;
       score += 10;
-      updateScore(score);
+      setScore(score);
     }
   }
 }
 
-void checkEnemyBehavior() {
+void updateEnemy() {
   checkEnemyOverlapsScreeen();
-  if(enemyBehavior[2] == 0) {
+  if(enemyBehavior[2] == STATE_ATACKING) {
     if(checkEnemyShipCollision() == 1) {
-      updateLives(--playerLives);
-      enemyBehavior[2] = 1;
+      setLives(--playerLives);
+      enemyBehavior[2] = STATE_DEAD;
       playerPosition = INIT_P_POSX;
     }
   }
 }
 
-void checkBehavior(void) {
-   checkEnemyBehavior();
-   checkBulletBehavior();
+void update(void) {
+   movePlayer();
+   moveEnemy();
+   moveBullet();
+   updateEnemy();
+   updateBullet();
+   // mó...rreu
    if(playerLives == 0) {
      gameState = ST_GAMEOVER;
    }
 }
-//====================================
-// Moving
-//====================================
-void moveEnemy(void) {
-  if(enemyBehavior[2] == 1) {
-    enemyBehavior[2] = 0;
-    enemyBehavior[1] = INIT_E_POSY;
-    enemyBehavior[0] = randEnemyXPos();
-  } else {
-    ++enemyBehavior[1];
-  }
-}
 
-void movePlayer(void) {
-  unsigned int ks = SMS_getKeysStatus();
-  if((ks & PORT_A_KEY_LEFT) && (playerPosition > MIN_X)) {
-    playerPosition -= 2;
-  } else if((ks & PORT_A_KEY_RIGHT) && (playerPosition < MAX_XY)) {
-    playerPosition += 2;
-  }
-}
-
-void moveBullet(void) {
-  unsigned int ks;
-  // ok para atirar
-  if(bulletBehavior[2] == 1) {
-    ks = SMS_getKeysStatus();
-    if(ks & PORT_A_KEY_1) {
-      bulletBehavior[0] = playerPosition;
-      bulletBehavior[1] = INIT_P_POSY + 8;
-      bulletBehavior[2] = 0;
-    }
-  } else {
-    --bulletBehavior[1];
-  }
-}
 //====================================
 // Drawing
 //====================================
+void drawBullet(void) {
+  if(bulletBehavior[2] == STATE_FIRED) {
+    SMS_addSprite(bulletBehavior[0], bulletBehavior[1], BULLET_TILE);
+  }
+}
+
 void drawPlayer(void) {
   SMS_addSprite(playerPosition, INIT_P_POSY, SHIP_TILE);
+  drawBullet();
 }
 
 void drawEnemy(void) {
-  if(enemyBehavior[2] == 0) {
+  if(enemyBehavior[2] == STATE_ATACKING) {
       SMS_addSprite(enemyBehavior[0], enemyBehavior[1], ENEMY_TILE);
   }
 }
 
-void drawBullet(void) {
-  if(bulletBehavior[2] == 0) {
-    SMS_addSprite(bulletBehavior[0], bulletBehavior[1], BULLET_TILE);
-  }
+void draw() {
+  SMS_initSprites();
+  drawPlayer();
+  drawEnemy();
+  SMS_finalizeSprites();
 }
 
 //====================================
@@ -293,26 +307,19 @@ void gameOverScene(void) {
 
 void mainScene(void) {
   playerPosition = INIT_P_POSX;
-  enemyBehavior[2] = 1;
-  bulletBehavior[2] = 1;
+  enemyBehavior[2] = STATE_DEAD;
+  bulletBehavior[2] = STATE_DEAD;
   playerLives = START_LIVES;
   score = 0;
   level = 1;
   loadMainAssets();
-  updateScore(score);
-  updateLevel(level);
-  updateLives(playerLives);
+  setScore(score);
+  setLevel(level);
+  setLives(playerLives);
   SMS_displayOn();
   while(gameState == ST_MAIN) {
-    movePlayer();
-    moveEnemy();
-    moveBullet();
-    checkBehavior();
-    SMS_initSprites();
-    drawPlayer();
-    drawEnemy();
-    drawBullet();
-    SMS_finalizeSprites();
+    update();
+    draw();
     SMS_waitForVBlank();
     SMS_copySpritestoSAT();
   }

@@ -1,0 +1,4 @@
+#define STATE_SHOTTING 1
+#define STATE_ATACKING 2
+#define STATE_DEAD 3
+#define STATE_FIRED 4
