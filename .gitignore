@@ -8,3 +8,4 @@ game.rel
 *.mem
 *.rst
 *.sym
+.DS_Store
