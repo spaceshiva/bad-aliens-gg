@@ -1,4 +1,5 @@
 game.rel
+main.rel
 *.noi
 *.asm
 *.ihx
